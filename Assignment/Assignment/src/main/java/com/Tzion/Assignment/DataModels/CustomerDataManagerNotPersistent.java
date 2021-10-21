@@ -15,17 +15,17 @@ import java.util.HashMap;
 
 
 @Repository
-public class CustomerDataManager_Not_Persistent {
+public class CustomerDataManagerNotPersistent {
 
-    private static HashMap<Integer , Customer> testData;
+    private static HashMap<String , Customer> testData;
 
     static {
-        testData = new HashMap<Integer , Customer>() {
+        testData = new HashMap<String , Customer>() {
             {
                 //first customer
-                put(123456789, new Customer(
+                put("123456789", new Customer(
                         "Moshe Coen",
-                        123456789,
+                        "123456789",
                         new ContactInformation(
                                 "moshe@notRealMail.com",
                                 "052-5555555",
@@ -37,14 +37,14 @@ public class CustomerDataManager_Not_Persistent {
                         LocalDate.of(1998, Month.APRIL ,5),
                         123948,
                         new CreditCardInformation(
-                                1234567812345678L,
+                                234567812345678L,
                                 123,
                                 LocalDate.of(2026,Month.AUGUST,13))));
 ////////////////////////////////////////////////////////////////////////////////////////////////
                 //second customer
-                put(123412345, new Customer(
+                put("123412345", new Customer(
                         "Mira Hmeirov",
-                        123412345,
+                        "123412345",
                         new ContactInformation(
                                 "mira@notRealMail.com",
                                 "052-5555534",
@@ -61,9 +61,9 @@ public class CustomerDataManager_Not_Persistent {
                                 LocalDate.of(2027,Month.FEBRUARY,19))));
 ////////////////////////////////////////////////////////////////////////////////////////////////
                 //third customer
-                put(123409876, new Customer(
+                put("123409876", new Customer(
                         "Hana Hanina",
-                        123409876,
+                        "123409876",
                         new ContactInformation(
                                 "hana@notRealMail.com",
                                 "052-5152534",
@@ -80,9 +80,9 @@ public class CustomerDataManager_Not_Persistent {
                                 LocalDate.of(2037,Month.FEBRUARY,3))));
 ////////////////////////////////////////////////////////////////////////////////////////////////
                 //fourth customer
-                put(718285129, new Customer(
+                put("718285129", new Customer(
                         "Peter Petrov",
-                        718285129,
+                        "718285129",
                         new ContactInformation(
                                 "peter@notRealMail.com",
                                 "055-9372014",
@@ -99,9 +99,9 @@ public class CustomerDataManager_Not_Persistent {
                                 LocalDate.of(2087,Month.FEBRUARY,9))));
 ////////////////////////////////////////////////////////////////////////////////////////////////
                 //fifth customer
-                put(662135129, new Customer(
+                put("662135129", new Customer(
                         "Nicolay Pushkin",
-                        662135129,
+                        "662135129",
                         new ContactInformation(
                                 "nicolay@notRealMail.com",
                                 "054-8223014",
@@ -118,9 +118,9 @@ public class CustomerDataManager_Not_Persistent {
                                 LocalDate.of(2097,Month.APRIL,13))));
 ////////////////////////////////////////////////////////////////////////////////////////////////
                 //sixth customer
-                put(488841648, new Customer(
+                put("488841648", new Customer(
                         "Nicolay Tolstoy",
-                        488841648,
+                        "488841648",
                         new ContactInformation(
                                 "nicolay@notRealMail.com",
                                 "058-1113014",
@@ -146,13 +146,13 @@ public class CustomerDataManager_Not_Persistent {
     }
 
     //O(1) time | this method return a specific customer by his id
-    public Customer getCustomerById(int id){
+    public Customer getCustomerById(String id){
         if(!this.testData.containsKey(id)){return null;}
         return this.testData.get(id);
     }
 
     //O(1) | this method remove a specific customer by his id
-    public void deleteCustomerById(int id){
+    public void deleteCustomerById(String id){
         if(this.testData.containsKey(id)){this.testData.remove(id);}
     }
 
@@ -166,16 +166,19 @@ public class CustomerDataManager_Not_Persistent {
         this.testData.put(customer.getId() , customer);
     }
 
-    //O(n) time| methods for Search Services, get customer by name
-    public int getCustomerByName(String name) {
-        for(Customer c : this.testData.values()){
-            if(c.getName().equals(name)){return c.getId();}
-        }
-        return -1;
-    }
-
     //////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////Methods for Search Services/////////////////////////////
+
+    //O(n) time| methods for Search Services, get customer by name,
+    //if more then one customer with this name it will return his too
+    public Collection<Customer> getCustomerByName(String name) {
+        Collection<Customer> customer = new ArrayList<Customer>();
+        for(Customer c : this.testData.values()){
+            if(c.getName().equals(name)){customer.add(c);}
+        }
+        return customer;
+    }
+
     //O(n) time| methods for Search Services, get all customers in a specific city
     public Collection<Customer> getCustomersByCity(String city) {
         Collection<Customer> inTheCity = new ArrayList<Customer>();

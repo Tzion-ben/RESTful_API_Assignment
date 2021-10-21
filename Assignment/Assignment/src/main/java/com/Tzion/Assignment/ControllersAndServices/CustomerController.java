@@ -6,13 +6,14 @@ package com.Tzion.Assignment.ControllersAndServices;
  * @author Tzion Beniaminov
  */
 import com.Tzion.Assignment.DataModels.Customer;
+import com.Tzion.Assignment.DataModels.SearchBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
-@RequestMapping(path = "api/Tzion/assignment/customers")
+@RequestMapping(path = "api/customers")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -30,25 +31,40 @@ public class CustomerController {
 
     //this method will GET a customer by his id, part of CRUD
     @GetMapping(value = "/{id}")
-    public Customer getCustomerById(@PathVariable("id") int id){
+    public Customer getCustomerById(@PathVariable("id") String id){
         return customerService.getCustomerById(id);
     }
 
     //this method will DELETE a customer by his id, part of CRUD
     @DeleteMapping(value = "/{id}" )
-    public void deleteCustomerById(@PathVariable("id") int id){
+    public void deleteCustomerById(@PathVariable("id") String id){
         customerService.deleteCustomerById(id);
     }
 
     //this method will UPDATE a customer by his id, part of CRUD
     @PutMapping(value = "/{id}")
-    public void updateCustomer(@PathVariable("id") int id ,@RequestBody String inputToUpdate){
+    public void updateCustomer(@PathVariable("id") String id ,@RequestBody Customer inputToUpdate){
         customerService.updateCustomer(id , inputToUpdate);
     }
 
-    //this method will POST a new customer
-    @PostMapping
-    public void postNewCustomer(@RequestBody String inputCustomer){
+    //this method will POST a new customer, part of CRUD
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public void postNewCustomer(@RequestBody Customer inputCustomer){
         customerService.postNewCustomer(inputCustomer);
+    }
+
+    @PostMapping
+    public Collection<Customer> search(@RequestBody SearchBody body){
+        if(body.getName() != null){
+            return customerService.searchByName(body.getName());
+        }
+        if(body.getCity()!=null){
+            return customerService.getCustomersByCity(body.getCity());
+        }
+        if(body.getStartRangeAge_endRangeAge() != null){
+            return customerService.getCustomersByAgeGroup(body.getStartRangeAge_endRangeAge());
+        }
+
+        return null;
     }
 }

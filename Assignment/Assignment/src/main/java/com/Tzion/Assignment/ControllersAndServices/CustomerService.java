@@ -6,106 +6,104 @@ package com.Tzion.Assignment.ControllersAndServices;
  * @author Tzion Beniaminov
  */
 import com.Tzion.Assignment.DataModels.Customer;
-import com.Tzion.Assignment.DataModels.CustomerDataManager_Not_Persistent;
+import com.Tzion.Assignment.DataModels.CustomerDataManagerNotPersistent;
 import com.Tzion.Assignment.Exceptions.ApiRequestException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.networknt.schema.JsonSchema;
-import com.networknt.schema.JsonSchemaFactory;
-import com.networknt.schema.SpecVersion;
-import com.networknt.schema.ValidationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
 import java.util.Collection;
-import java.util.Set;
+
 
 @Service
 public class CustomerService {
 
     @Autowired
-    private CustomerDataManager_Not_Persistent fakeTestDate;
+    private CustomerDataManagerNotPersistent dataManagment;
 
     //returns all the objects of the customers
     public Collection<Customer> getAllCustomers(){
-        if(fakeTestDate.getAllCustomers().isEmpty())
+        if(dataManagment.getAllCustomers().isEmpty())
         {throw new ApiRequestException("There is no Have a customers");}
 
-        return fakeTestDate.getAllCustomers();
+        return dataManagment.getAllCustomers();
     }
 
     //return a specific customer by his id
-    public Customer getCustomerById(int id){
-        if(fakeTestDate.getCustomerById(id) == null)
+    public Customer getCustomerById(String id){
+        if(dataManagment.getCustomerById(id) == null)
         {throw new ApiRequestException("There is no such customer");}
-        return fakeTestDate.getCustomerById(id);
+        return dataManagment.getCustomerById(id);
     }
 
     //remove a specific customer by his id
-    public void deleteCustomerById(int id){
-        if(fakeTestDate.getCustomerById(id) == null)
+    public void deleteCustomerById(String id){
+        if(dataManagment.getCustomerById(id) == null)
         {throw new ApiRequestException("There is no such customer");}
-        fakeTestDate.deleteCustomerById(id);
+        dataManagment.deleteCustomerById(id);
     }
 
 
     //this method will POST a new customer
-    public void postNewCustomer(String inputCustomer) {
-        Customer customer = updateORpost(inputCustomer);
-
-        //need to check if the customer is already exist
-        if(fakeTestDate.getCustomerById(customer.getId()) != null)
+    public void postNewCustomer(Customer inputCustomer) {
+        if(inputCustomer == null){
+            throw new ApiRequestException("Id is missing");
+        }
+        //need to check if the customer is already exist or the id is missing
+        if(inputCustomer.getId() == null) {throw new ApiRequestException("Id is missing");}
+        if(dataManagment.getCustomerById(inputCustomer.getId()) != null)
         {throw new ApiRequestException("This customer already exist");}
 
-        fakeTestDate.postNewCustomer(customer);
+        dataManagment.postNewCustomer(inputCustomer);
     }
 
 
     //this method will UPDATE a customer by his id, part of CRUD
-    public void updateCustomer(int id,String inputToUpdate){
+    public void updateCustomer(String id,Customer inputToUpdate){
         // if this customer not exist so can't update it
-        if(fakeTestDate.getCustomerById(id) == null)
+        if(dataManagment.getCustomerById(id) == null)
         {throw new ApiRequestException("This customer is not exist, can't update.");}
 
-        Customer customer = updateORpost(inputToUpdate);
-        fakeTestDate.updateCustomer(customer);
+        dataManagment.updateCustomer(inputToUpdate);
     }
 
+    /////////////////////////////////////////////////////////////////////////
+    /**
+     * In addition to the CRUD operations, I will implement the following search operations:
+     * a. Find a customer by name
+     * b. Find customers living in a specific city
+     * c. Find customers in a specific age group (e.g. age 21 to 30).
+     */
+    //will return a customer with a specific name if there is one
+    public Collection<Customer> searchByName(String name) {
+        Collection<Customer> specificName =  dataManagment.getCustomerByName(name);
+        if(specificName == null)
+        {throw new ApiRequestException("There is no such customer");}
+        return specificName;
+    }
 
-    //this method will validate the input JSON for create a new customer or to updating
-    //existing one
-    private Customer updateORpost (String inputCustomer){
-        //will validate the input JSON by the customer.schema.json file
-        InputStream inputStream = Customer.class.getClassLoader().getResourceAsStream("model/customer.schema.json");
-        JsonSchema jsonSchema = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7).getSchema(inputStream);
+    //will return the customers that lives in a specific city
+    public Collection<Customer> getCustomersByCity(String city) {
+        Collection<Customer> inTheCity = dataManagment.getCustomersByCity(city);
+        if(inTheCity.isEmpty())
+        {throw new ApiRequestException("There is no customers in "+city);}
+        return inTheCity;
+    }
 
-        //an object to read the JSON
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        JsonNode jsonNode;
+    //will return the customers in specific age range
+    public Collection<Customer> getCustomersByAgeGroup(String ages) {
+        String [] agesRange = ages.split(" ");
+        int startAge = 0;
+        int endAge = 0;
         try {
-            jsonNode = objectMapper.readTree(inputCustomer);
-        } catch (JsonProcessingException e) {
-            throw new ApiRequestException("JSON is incorrect, please fix it :)");
+            startAge = Integer.valueOf(agesRange[1]);
+            endAge = Integer.valueOf(agesRange[3]);
+        }catch (Exception e){
+            throw new ApiRequestException("The range isn't correct");
         }
-
-        Set<ValidationMessage> errors = jsonSchema.validate(jsonNode);
-        StringBuilder errorMessage = new StringBuilder();
-        for(ValidationMessage error : errors){errorMessage.append(error.toString());}
-
-        //throw a string that represent the missing properties in the JSON input string
-        if(errors.size() > 0){throw new ApiRequestException(errorMessage.toString());}
-
-        Customer customer;
-        try {
-            customer = objectMapper.readValue(jsonNode.toString() , Customer.class);
-        } catch (JsonProcessingException e) {
-            throw new ApiRequestException("Cannot read the JSON file");
-        }
-
-        return customer;
+        Collection<Customer> inAgeRange = dataManagment.getCustomersByAgeGroup(startAge , endAge);
+        if(inAgeRange.isEmpty())
+        {throw new ApiRequestException("There is no customers in age group from "
+                +startAge + " to "+ endAge);}
+        return inAgeRange;
     }
 }

@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 public class Customer {
     private String name;
-    private int id;
+    private String id;
     private ContactInformation contactInfo;
     private LocalDate dateOfBirth;
     private int DLnum; // Abbreviation for Driver License Number
@@ -18,7 +18,7 @@ public class Customer {
     public Customer() {}
 
     public Customer(String name,
-                    int id,
+                    String id,
                     ContactInformation contactInfo,
                     LocalDate dateOfBirth,
                     int DLnum,
@@ -47,7 +47,7 @@ public class Customer {
         return name;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -71,7 +71,7 @@ public class Customer {
         this.name = name;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
