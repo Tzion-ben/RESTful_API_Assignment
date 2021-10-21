@@ -12,6 +12,7 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 
 @Repository
@@ -171,8 +172,8 @@ public class CustomerDataManagerNotPersistent {
 
     //O(n) time| methods for Search Services, get customer by name,
     //if more then one customer with this name it will return his too
-    public Collection<Customer> getCustomerByName(String name) {
-        Collection<Customer> customer = new ArrayList<Customer>();
+    public List<Customer> getCustomerByName(String name) {
+        List<Customer> customer = new ArrayList<Customer>();
         for(Customer c : this.testData.values()){
             if(c.getName().equals(name)){customer.add(c);}
         }
@@ -180,11 +181,10 @@ public class CustomerDataManagerNotPersistent {
     }
 
     //O(n) time| methods for Search Services, get all customers in a specific city
-    public Collection<Customer> getCustomersByCity(String city) {
-        Collection<Customer> inTheCity = new ArrayList<Customer>();
-        for(Customer c : this.testData.values()){
-            if(c.getContactInfo().getAddress().getCityName().equals(city)){
-                inTheCity.add(c);
+    public List<Customer> getCustomersByCity(List<Customer> inTheCity , String city) {
+        for(int i = 0 ; i<inTheCity.size() ; i++){
+            if(!inTheCity.get(i).getContactInfo().getAddress().getCityName().equals(city)){
+                inTheCity.remove(inTheCity.get(i--));
             }
         }
         return inTheCity;
@@ -192,12 +192,11 @@ public class CustomerDataManagerNotPersistent {
 
     //O(n) time| methods for Search Services, get all customers in a specific age range
     //using JAVA LocalDate object
-    public Collection<Customer> getCustomersByAgeGroup(int startAge , int endAge) {
-        Collection<Customer> inAgeRange = new ArrayList<Customer>();
-        for(Customer c : this.testData.values()){
-            int customerAge = Period.between(c.getDateOfBirth() , LocalDate.now()).getYears();
-            if((customerAge >= startAge)&&(customerAge <= endAge)){
-                inAgeRange.add(c);
+    public List<Customer> getCustomersByAgeGroup(List<Customer> inAgeRange , int startAge , int endAge) {
+        for(int i = 0 ; i<inAgeRange.size() ; i++){
+            int customerAge = Period.between(inAgeRange.get(i).getDateOfBirth() , LocalDate.now()).getYears();
+            if(!(customerAge >= startAge)&&(customerAge <= endAge)){
+                inAgeRange.remove(inAgeRange.get(i--));
             }
         }
         return inAgeRange;

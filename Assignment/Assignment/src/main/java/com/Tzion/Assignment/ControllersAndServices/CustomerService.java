@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 
 @Service
@@ -74,23 +75,22 @@ public class CustomerService {
      * c. Find customers in a specific age group (e.g. age 21 to 30).
      */
     //will return a customer with a specific name if there is one
-    public Collection<Customer> searchByName(String name) {
-        Collection<Customer> specificName =  dataManagment.getCustomerByName(name);
-        if(specificName == null)
+    public List<Customer> searchByName(String name) {
+        List<Customer> specificName =  dataManagment.getCustomerByName(name);
+        if(specificName.isEmpty())
         {throw new ApiRequestException("There is no such customer");}
         return specificName;
     }
 
     //will return the customers that lives in a specific city
-    public Collection<Customer> getCustomersByCity(String city) {
-        Collection<Customer> inTheCity = dataManagment.getCustomersByCity(city);
+    public void getCustomersByCity(List<Customer> inTheCity , String city) {
+        dataManagment.getCustomersByCity(inTheCity ,city);
         if(inTheCity.isEmpty())
         {throw new ApiRequestException("There is no customers in "+city);}
-        return inTheCity;
     }
 
     //will return the customers in specific age range
-    public Collection<Customer> getCustomersByAgeGroup(String ages) {
+    public void getCustomersByAgeGroup(List<Customer> inAgeRange , String ages) {
         String [] agesRange = ages.split(" ");
         int startAge = 0;
         int endAge = 0;
@@ -100,10 +100,10 @@ public class CustomerService {
         }catch (Exception e){
             throw new ApiRequestException("The range isn't correct");
         }
-        Collection<Customer> inAgeRange = dataManagment.getCustomersByAgeGroup(startAge , endAge);
+        if(startAge > endAge){throw new ApiRequestException("The range isn't correct");}
+        dataManagment.getCustomersByAgeGroup(inAgeRange , startAge , endAge);
         if(inAgeRange.isEmpty())
         {throw new ApiRequestException("There is no customers in age group from "
                 +startAge + " to "+ endAge);}
-        return inAgeRange;
     }
 }

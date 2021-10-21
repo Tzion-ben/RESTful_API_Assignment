@@ -7,16 +7,18 @@ package com.Tzion.Assignment.ControllersAndServices;
  */
 import com.Tzion.Assignment.DataModels.Customer;
 import com.Tzion.Assignment.DataModels.SearchBody;
+import com.Tzion.Assignment.Exceptions.ApiRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "api/customers")
 public class CustomerController {
 
-    private final CustomerService customerService;
+    private  CustomerService customerService;
 
     @Autowired
     public CustomerController(CustomerService customerService) {
@@ -54,17 +56,15 @@ public class CustomerController {
     }
 
     @PostMapping(value = "/search")
-    public Collection<Customer> search(@RequestBody SearchBody body){
-        if(body.getName() != null){
-            return customerService.searchByName(body.getName());
-        }
-        if(body.getCity()!=null){
-            return customerService.getCustomersByCity(body.getCity());
-        }
-        if(body.getAgeGroup() != null){
-            return customerService.getCustomersByAgeGroup(body.getAgeGroup());
+    public List<Customer> search(@RequestBody SearchBody body){
+        if(body.getName() != null && body.getCity()!=null && body.getAgeGroup() != null){
+            List<Customer> ans = customerService.searchByName(body.getName());
+            customerService.getCustomersByCity(ans , body.getCity());
+            customerService.getCustomersByAgeGroup(ans , body.getAgeGroup());
+
+            return ans;
         }
 
-        return null;
+        throw new ApiRequestException("There is missing properties");
     }
 }
