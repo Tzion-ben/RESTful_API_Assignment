@@ -7,14 +7,14 @@ package com.Tzion.Assignment.DataModels;
 public class SearchBody {
     private String name;
     private String city;
-    private String startRangeAge_endRangeAge;
+    private String ageGroup;
 
     public SearchBody() {}
 
-    public SearchBody(String name, String city, String startRangeAge_endRangeAge) {
+    public SearchBody(String name, String city, String ageGroup) {
         this.name = name;
         this.city = city;
-        this.startRangeAge_endRangeAge = startRangeAge_endRangeAge;
+        this.ageGroup = ageGroup;
     }
 
     public String getName() {
@@ -25,8 +25,8 @@ public class SearchBody {
         return city;
     }
 
-    public String getStartRangeAge_endRangeAge() {
-        return startRangeAge_endRangeAge;
+    public String getAgeGroup() {
+        return ageGroup;
     }
 
     public void setName(String name) {
@@ -37,7 +37,7 @@ public class SearchBody {
         this.city = city;
     }
 
-    public void setStartRangeAge_endRangeAge(String startRangeAge_endRangeAge) {
-        this.startRangeAge_endRangeAge = startRangeAge_endRangeAge;
+    public void setAgeGroup(String ageGroup) {
+        this.ageGroup = ageGroup;
     }
 }

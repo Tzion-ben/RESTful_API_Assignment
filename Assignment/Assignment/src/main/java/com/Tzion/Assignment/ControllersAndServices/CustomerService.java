@@ -95,8 +95,8 @@ public class CustomerService {
         int startAge = 0;
         int endAge = 0;
         try {
-            startAge = Integer.valueOf(agesRange[1]);
-            endAge = Integer.valueOf(agesRange[3]);
+            startAge = Integer.valueOf(agesRange[0]);
+            endAge = Integer.valueOf(agesRange[2]);
         }catch (Exception e){
             throw new ApiRequestException("The range isn't correct");
         }

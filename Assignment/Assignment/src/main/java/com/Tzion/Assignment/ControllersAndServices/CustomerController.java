@@ -53,7 +53,7 @@ public class CustomerController {
         customerService.postNewCustomer(inputCustomer);
     }
 
-    @PostMapping
+    @PostMapping(value = "/search")
     public Collection<Customer> search(@RequestBody SearchBody body){
         if(body.getName() != null){
             return customerService.searchByName(body.getName());
@@ -61,8 +61,8 @@ public class CustomerController {
         if(body.getCity()!=null){
             return customerService.getCustomersByCity(body.getCity());
         }
-        if(body.getStartRangeAge_endRangeAge() != null){
-            return customerService.getCustomersByAgeGroup(body.getStartRangeAge_endRangeAge());
+        if(body.getAgeGroup() != null){
+            return customerService.getCustomersByAgeGroup(body.getAgeGroup());
         }
 
         return null;
