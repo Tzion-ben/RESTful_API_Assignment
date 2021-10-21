@@ -1,0 +1,245 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "examples": [
+    {
+      "name": "Mira Hmeirov",
+      "id": 123412345,
+      "contactInfo": {
+        "email": "mira@notRealMail.com",
+        "phoneNumber": "052-5555534",
+        "address": {
+          "cityName": "Haifa",
+          "zipCode": "3056129",
+          "houseNum": "34",
+          "apartmentNum": "11"
+        }
+      },
+      "dateOfBirth": "1990-04-09",
+      "creditCardInfo": {
+        "cardNum": 1234123412341234,
+        "cvv": 321,
+        "validThru": "2027-02-19"
+      },
+      "dlnum": 124599
+    }
+  ],
+  "required": [
+    "name",
+    "id",
+    "contactInfo",
+    "dateOfBirth",
+    "creditCardInfo",
+    "dlnum"
+  ],
+  "properties": {
+    "name": {
+      "$id": "#/properties/name",
+      "type": "string",
+      "title": "The name schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "Mira Hmeirov"
+      ]
+    },
+    "id": {
+      "$id": "#/properties/id",
+      "type": "integer",
+      "title": "The id schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        123412345
+      ]
+    },
+    "contactInfo": {
+      "$id": "#/properties/contactInfo",
+      "type": "object",
+      "title": "The contactInfo schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "email": "mira@notRealMail.com",
+          "phoneNumber": "052-5555534",
+          "address": {
+            "cityName": "Haifa",
+            "zipCode": "3056129",
+            "houseNum": "34",
+            "apartmentNum": "11"
+          }
+        }
+      ],
+      "required": [
+        "email",
+        "phoneNumber",
+        "address"
+      ],
+      "properties": {
+        "email": {
+          "$id": "#/properties/contactInfo/properties/email",
+          "type": "string",
+          "title": "The email schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "mira@notRealMail.com"
+          ]
+        },
+        "phoneNumber": {
+          "$id": "#/properties/contactInfo/properties/phoneNumber",
+          "type": "string",
+          "title": "The phoneNumber schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "052-5555534"
+          ]
+        },
+        "address": {
+          "$id": "#/properties/contactInfo/properties/address",
+          "type": "object",
+          "title": "The address schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": {},
+          "examples": [
+            {
+              "cityName": "Haifa",
+              "zipCode": "3056129",
+              "houseNum": "34",
+              "apartmentNum": "11"
+            }
+          ],
+          "required": [
+            "cityName",
+            "zipCode",
+            "houseNum",
+            "apartmentNum"
+          ],
+          "properties": {
+            "cityName": {
+              "$id": "#/properties/contactInfo/properties/address/properties/cityName",
+              "type": "string",
+              "title": "The cityName schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": [
+                "Haifa"
+              ]
+            },
+            "zipCode": {
+              "$id": "#/properties/contactInfo/properties/address/properties/zipCode",
+              "type": "string",
+              "title": "The zipCode schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": [
+                "3056129"
+              ]
+            },
+            "houseNum": {
+              "$id": "#/properties/contactInfo/properties/address/properties/houseNum",
+              "type": "string",
+              "title": "The houseNum schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": [
+                "34"
+              ]
+            },
+            "apartmentNum": {
+              "$id": "#/properties/contactInfo/properties/address/properties/apartmentNum",
+              "type": "string",
+              "title": "The apartmentNum schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": "",
+              "examples": [
+                "11"
+              ]
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "dateOfBirth": {
+      "$id": "#/properties/dateOfBirth",
+      "type": "string",
+      "title": "The dateOfBirth schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "1990-04-09"
+      ]
+    },
+    "creditCardInfo": {
+      "$id": "#/properties/creditCardInfo",
+      "type": "object",
+      "title": "The creditCardInfo schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "cardNum": 1234123412341234,
+          "cvv": 321,
+          "validThru": "2027-02-19"
+        }
+      ],
+      "required": [
+        "cardNum",
+        "cvv",
+        "validThru"
+      ],
+      "properties": {
+        "cardNum": {
+          "$id": "#/properties/creditCardInfo/properties/cardNum",
+          "type": "integer",
+          "title": "The cardNum schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            1234123412341234
+          ]
+        },
+        "cvv": {
+          "$id": "#/properties/creditCardInfo/properties/cvv",
+          "type": "integer",
+          "title": "The cvv schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            321
+          ]
+        },
+        "validThru": {
+          "$id": "#/properties/creditCardInfo/properties/validThru",
+          "type": "string",
+          "title": "The validThru schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "2027-02-19"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "dlnum": {
+      "$id": "#/properties/dlnum",
+      "type": "integer",
+      "title": "The dlnum schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": 0,
+      "examples": [
+        124599
+      ]
+    }
+  },
+  "additionalProperties": true
+}
